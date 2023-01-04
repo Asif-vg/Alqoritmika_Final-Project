@@ -1,0 +1,415 @@
+﻿@{
+    ViewData["Title"] = "Shopping Page";
+}
+@model VmProduct
+<!-- #region Breadcrump Area -->
+<section id="breadcrump">
+    <div class="breadcrumb-wrapper" style="background-image: url('/img/bg-image/@Model.Banner.BgImage');">
+        <div class="container h-100">
+            <div class="row h-100">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-content">
+                        <h2 class="breadcrumb-page">Shop</h2>
+                        <ul>
+                            <li>
+                                <a asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li>@Model.Banner.Title</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- #endregion Breadcrump Area End -->
+<!-- #region Shop -->
+<section id="shop">
+    <div class="shop-page-full pb-100 pt-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-3 col-lg-4 order-2 order-lg-1 pt-5 pt-lg-0">
+                    <div class="sidebar-wrapper">
+                        <div class="searchbox-tool">
+                            <form id="searchbox-tool" asp-controller="Shop" asp-action="Index" method="post">
+                                <input class="input-field" type="text" asp-for="@Model.Search.SearchData" value="@(Model.Search.SearchData==null?"Search...":Model.Search.SearchData)" autocomplete="off">
+                                <button class="searchbox-tool-btn" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <div class="widgets-area">
+                            <div class="widgets-item pt-0">
+                                <h2 class="widgets-title mb-4">Categories</h2>
+                                <ul id="WCatScroll" class="widgets-category" style=" height: 205px; overflow: auto;">
+                                    @foreach (var item in Model.ProductCats)
+                                    {
+                                        <li>
+                                            <a asp-controller="Shop" asp-action="Index" asp-route-SearchCategory="@item.Id" class="@(Model.Search.SearchCategory==item.Id?"active":"")">
+                                                <i class="fa fa-chevron-right"></i>
+                                                @item.CategoryName
+                                            </a>
+                                        </li>
+                                    }
+
+                                </ul>
+                            </div>
+                            <div class="widgets-item">
+                                <h2 class="widgets-title mb-4">Size</h2>
+                                <ul class="widgets-category widgets-color">
+                                    @foreach (var item in Model.ProductSizes)
+                                    {
+                                        <li>
+                                            <a asp-controller="Shop" asp-action="Index" asp-route-SearchSize="@item.Id" class="@(Model.Search.SearchSize==item.Id?"active":"")">
+                                                <i class="fa fa-chevron-right"></i>
+                                                @item.Size
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="widgets-item widgets-filter">
+                                <h2 class="widgets-title mb-4">Price Filter</h2>
+                                <div class="price-filter">
+                                    <form asp-controller="Shop" asp-action="Index" method="post" class="text-center">
+                                        <input id="Tester2" type="text" class="js-range-slider" name="my_range" value="" />
+                                        <input id="min-value" type="hidden" asp-for="@Model.Search.minValue" />
+                                        <input id="max-value" type="hidden" asp-for="@Model.Search.maxValue" />
+                                        <button id="tester3" type="submit" class="btn btn-sm btn-success filterBtn">
+                                            Filter
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="widgets-item">
+                                <h2 class="widgets-title mb-4">Populer Tags</h2>
+                                <ul class="widgets-tag">
+                                    @foreach (var item in Model.ProductTags)
+                                    {
+                                        <li>
+                                            <a asp-controller="Shop" asp-action="Index" asp-route-SearchTag="@item.Id" class="@(Model.Search.SearchTag==item.Id?"active":"")">@item.TagName</a>
+                                        </li>
+                                    }
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="collection-area pt-40">
+                            <div class="collection-item collection-item-hover">
+                                <div class="collection-img">
+                                    <img style="object-fit: cover;" src="~/img/collection/@Model.collectionS.Image" alt="Banner Image">
+                                </div>
+                                <div class="collection-content collection-content-center">
+                                    <span class="collection">@Model.collectionS.SubTitle</span>
+                                    <h3 class="title">@Model.collectionS.Title</h3>
+                                    <div class="btn-wrapper">
+                                        <a class="btn btn-custom" asp-controller="Shop" asp-action="Index" asp-route-SearchCategory="@Model.collectionS.ProductCatId">
+                                            Shop
+                                            Now
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xl-9 col-lg-8 order-1 order-lg-2">
+                    <div class="product-header pb-50">
+                        <ul class="product-action">
+                            <li class="product-count">
+                                <span>@Model.Products.Count</span> Product Found of <span>@ViewBag.ProductCount</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row">
+                        @foreach (var item in Model.Products)
+                        {
+                            <div class="col-md-4 col-sm-6">
+                                <div class="product-full">
+                                    <div class="product-item countforajax">
+                                        <div class="product-item-img">
+                                            <a asp-controller="Shop" asp-action="SingleProduct" asp-route-Id="@item.Id">
+                                                @{
+                                                    for (int i = 0; i < item.ProductImages.Count; i++)
+                                                    {
+                                                        if (i == 0)
+                                                        {
+                                                            <img class="primary-img" src="~/img/products/@item.ProductImages[i].Image" alt="Product Images">
+                                                        }
+                                                        else if (i == 1)
+                                                        {
+                                                            <img class="secondary-img" src="~/img/products/@item.ProductImages[i].Image" alt="Product Images">
+                                                        }
+                                                    }
+                                                }
+
+
+                                            </a>
+                                            <div class="product-add-action">
+                                                <ul>
+                                                    <li>
+                                                        <a href="wishlist.html" data-tippy="Add to wishlist" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                                                            <input class="add-to-wishlist-product-id" type="hidden" value="@item.Id" />
+                                                            <i class="fal fa-heart @(Model.Favourite==null? "": Model.Favourite.Any(f=>f==item.Id.ToString())? "added-to-wishlist":"")"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="quuickview-btn" data-bs-toggle="modal" data-bs-target="#quickModal">
+                                                        <a class="productFullDetail" data-tippy="Quickview" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                                                            <input type="hidden" value="@item.Id" />
+                                                            <i class="fal fa-eye"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="add-to-cart2" href="cart.html" data-tippy="Add to cart" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                                                            <input type="hidden" value="@item.Id" />
+                                                            <i class="fal fa-shopping-cart"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="product-content">
+                                            <a class="product-name" asp-controller="Shop" asp-action="SingleProduct" asp-route-Id="@item.Id" >
+                                                @item.Name
+                                            </a>
+                                            <div class="price-box pb-1">
+                                                <span class="new-price" style="@(item.ProductSizeToProducts.FirstOrDefault(pp=>pp.Quantity>0)!=null? "": "font-size: 15px !important; color: #da4949 !important;")">
+                                                    @(item.ProductSizeToProducts.FirstOrDefault(pp=>pp.Quantity>0)!=null? "$" + item.ProductSizeToProducts.FirstOrDefault(pp => pp.Quantity > 0).Price: "OUT OF STOCK")
+                                                </span>
+                                            </div>
+                                            <div class="rating-box rating-box1 @("rating-box-"+item.Id)">
+                                                <ul>
+                                                    <li>
+                                                        <i data-pd="@item.Id" data-rv="1" data-bs-toggle=@(User.Identity.IsAuthenticated?"":"modal") data-bs-target=@(User.Identity.IsAuthenticated?"":"#exampleModal2") class="@(User.Identity.IsAuthenticated?"user-enable":"")  fa fa-star fastar @("hvr-"+item.Id)">
+                                                        </i>
+                                                    </li>
+                                                    <li>
+                                                        <i data-pd="@item.Id" data-rv="2" data-bs-toggle=@(User.Identity.IsAuthenticated?"":"modal") data-bs-target=@(User.Identity.IsAuthenticated?"":"#exampleModal2") class="@(User.Identity.IsAuthenticated?"user-enable":"") fa fa-star fastar @("hvr-"+item.Id)">
+                                                        </i>
+                                                    </li>
+                                                    <li>
+                                                        <i data-pd="@item.Id" data-rv="3" data-bs-toggle=@(User.Identity.IsAuthenticated?"":"modal") data-bs-target=@(User.Identity.IsAuthenticated?"":"#exampleModal2") class="@(User.Identity.IsAuthenticated?"user-enable":"") fa fa-star fastar @("hvr-"+item.Id)">
+                                                        </i>
+                                                    </li>
+                                                    <li>
+                                                        <i data-pd="@item.Id" data-rv="4" data-bs-toggle=@(User.Identity.IsAuthenticated?"":"modal") data-bs-target=@(User.Identity.IsAuthenticated?"":"#exampleModal2") class="@(User.Identity.IsAuthenticated?"user-enable":"") fa fa-star fastar @("hvr-"+item.Id)">
+                                                        </i>
+                                                    </li>
+                                                    <li>
+                                                        <i data-pd="@item.Id" data-rv="5" data-bs-toggle=@(User.Identity.IsAuthenticated?"":"modal") data-bs-target=@(User.Identity.IsAuthenticated?"":"#exampleModal2") class="@(User.Identity.IsAuthenticated?"user-enable":"") fa fa-star fastar @("hvr-"+item.Id)">
+                                                        </i>
+                                                    </li>
+                                                </ul>
+                                                <div class="review" style=" margin-left: 15px;">
+                                                    <a data-id="@item.Id" id="rating_value" class="ratingdataid2" href="#" style="color: #525252; font-size: 14px;">
+                                                        @{
+                                                            if (item.Ratings.Count > 0)
+                                                            {
+                                                                var rval2 = item.Ratings;
+                                                                var fiveS = 0;
+                                                                var fourS = 0;
+                                                                var threeS = 0;
+                                                                var twoS = 0;
+                                                                var oneS = 0;
+                                                                for (var rs = 0; rs < rval2.Count; rs++)
+                                                                {
+
+
+                                                                    for (var str = 0; str < rval2.Count; str++)
+                                                                    {
+                                                                        if (rval2[str].Star == 5)
+                                                                        {
+                                                                            fiveS++;
+                                                                        }
+                                                                        else if (rval2[str].Star == 4)
+                                                                        {
+                                                                            fourS++;
+                                                                        }
+                                                                        else if (rval2[str].Star == 3)
+                                                                        {
+                                                                            threeS++;
+                                                                        }
+                                                                        else if (rval2[str].Star == 2)
+                                                                        {
+                                                                            twoS++;
+                                                                        }
+                                                                        else if (rval2[str].Star == 1)
+                                                                        {
+                                                                            oneS++;
+                                                                        }
+                                                                    }
+
+                                                                }
+
+                                                                decimal sum = (fiveS * 5) + (fourS * 4) + (threeS * 3) + (twoS * 2) + (oneS * 1);
+                                                                decimal rSum = fiveS + fourS + threeS + twoS + oneS;
+                                                                var sumRsum = Math.Round((sum / rSum), 1, MidpointRounding.ToEven);
+
+                                                                if (sumRsum != 0)
+                                                                {
+                                                                    @("( " + sumRsum.ToString("F1") + " )" );
+                                                                }
+                                                                else
+                                                                {
+                                                                    @("( 0.0)");
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                @("( 0.0)");
+                                                            }
+                                                        }
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                    @if (Model.Products.Count > 0)
+                    {
+                        <div class="pagination-full pt-50">
+                            <nav>
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item @(ViewBag.Page==1?"disabled":"")">
+                                        <a class="page-link" asp-controller="Shop" asp-action="Index" asp-route-Page="@(ViewBag.Page-1)" asp-route-minValue="@Model.Search.minValue" asp-route-maxValue="@Model.Search.maxValue" asp-route-SearchTag="@Model.Search.SearchTag" asp-route-SearchCategory="@Model.Search.SearchCategory" asp-route-SearchData="@Model.Search.SearchData" asp-route-SearchSize="@Model.Search.SearchSize" aria-label="Prev">&laquo;</a>
+                                    </li>
+                                    @for (int i = 0; i < ViewBag.PageCount; i++)
+                                    {
+                                        <li class="page-item @(ViewBag.Page==(i+1)?"active":"")"><a class="page-link" asp-controller="Shop" asp-action="Index" asp-route-Page="@(i+1)" asp-route-minValue="@Model.Search.minValue" asp-route-maxValue="@Model.Search.maxValue" asp-route-SearchTag="@Model.Search.SearchTag" asp-route-SearchCategory="@Model.Search.SearchCategory" asp-route-SearchData="@Model.Search.SearchData" asp-route-SearchSize="@Model.Search.SearchSize">@(i+1)</a></li>
+                                    }
+                                    <li class="page-item @(ViewBag.Page==ViewBag.PageCount?"disabled":"")">
+                                        <a class="page-link" asp-controller="Shop" asp-action="Index" asp-route-Page="@(ViewBag.Page+1)" asp-route-SearchTag="@Model.Search.SearchTag" asp-route-minValue="@Model.Search.minValue" asp-route-maxValue="@Model.Search.maxValue" asp-route-SearchCategory="@Model.Search.SearchCategory" asp-route-SearchData="@Model.Search.SearchData" asp-route-SearchSize="@Model.Search.SearchSize" aria-label="Next">&raquo;</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    }
+                    else
+                    {
+                        <div>
+                            <img class="w-100 h-100" src="~/img/uncategorized/NoResult.png" alt="Alternate Text" />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+<!-- #endregion Shop End -->
+<!-- #region Begin Modal -->
+<div class="modal product-modal-full fade product-detail-modal-ajax" id="quickModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="quickModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div id="noResult" style="position: absolute !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; z-index: 10 !important; ">
+                <img class="w-100 h-100" src="~/img/uncategorized/NoResult.png" alt="Alternate Text" />
+            </div>
+            <div class="modal-header" style="z-index: 20 !important">
+                <button id="modal-cls-btn2" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-tippy="Close" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                </button>
+            </div>
+            <div class="modal-body" id="productmodalbody">
+                <div class="modal-wrap row">
+                    <div class="col-lg-6">
+                        <div class="modal-img">
+                            <div class="swiper-container modal-slider">
+                                <div class="swiper-wrapper">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 pt-5 pt-lg-0">
+                        <div class="product-info">
+                            <h2 class="title" id="product-name">American Marigold</h2>
+                            <div class="price" style="padding-bottom: 15px !important;">
+                                <span class="new-price" id="modalPrice" style="font-size: 30px !important; color: #abd373 !important;">$23.45</span>
+                            </div>
+                            <div class="rating-wrap">
+                                <input id="ratValprodId" type="hidden" value="" />
+                                <div class="review" style="padding: 0 !important;">
+                                    <a id="rating_value22" href="#"></a>
+                                </div>
+                            </div>
+                            <div class="selector-full pb-30" id="selector-size">
+                                <span class="selector-title">Size</span>
+                                <select class="nice-select2 wide rounded-0" id="modalSize">
+                                </select>
+                            </div>
+                            <p class="product-desc" id="modal-product-desc">
+                                Lorem ipsum dolor sit amet, consectetur adipisic elit, sed do eiusmod
+                                tempo incid ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostru
+                                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                                dolor
+                                in reprehenderit in voluptate
+                            </p>
+                            <p id="quantity-left" class="d-none alert-danger text-danger" style="text-align: center !important; font-size: 20px !important; padding: 5px !important; border-radius: 5px !important; margin-bottom: 10px !important;">Only 4 left</p>
+                            <ul class="service-item-wrap pb-0">
+                                <li class="service-item">
+                                    <div class="service-img">
+                                        <img src="~/img/shipping/shipping-1.png" alt="Shipping Icon">
+                                    </div>
+                                    <div class="service-content">
+                                        <span>Free <br> Shipping</span>
+                                    </div>
+                                </li>
+                                <li class="service-item">
+                                    <div class="service-img">
+                                        <img src="~/img/shipping/shipping-2.png" alt="Shipping Icon">
+                                    </div>
+                                    <div class="service-content">
+                                        <span>Safe <br> Payment</span>
+                                    </div>
+                                </li>
+                                <li class="service-item">
+                                    <div class="service-img">
+                                        <img src="~/img/shipping/shipping-3.png" alt="Shipping Icon">
+                                    </div>
+                                    <div class="service-content">
+                                        <span>Safe <br> Payment</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #endregion Modal End -->
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="height: 100% !important; display: flex !important; flex-direction: column !important; justify-content: center !important; margin: auto !important; ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form>
+                <div class="modal-body row">
+                    <div class="mb-3 col-lg-6">
+                        <label for="recipient-name" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="mb-3 col-lg-6">
+                        <label for="recipient-surname" class="col-form-label">Surname:</label>
+                        <input type="text" class="form-control" id="recipient-surname">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-email" class="col-form-label">Email:</label>
+                        <input type="email" class="form-control" id="message-email">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="mdoalrat1" type="submit" class="btn btn-primary">Send message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

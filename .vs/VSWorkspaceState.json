@@ -1,0 +1,17 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Pronia_eCommerce",
+    "\\Pronia_eCommerce\\Pronia_eCommerce",
+    "\\Pronia_eCommerce\\Pronia_eCommerce\\Areas",
+    "\\Pronia_eCommerce\\Pronia_eCommerce\\Areas\\Admin",
+    "\\Pronia_eCommerce\\Pronia_eCommerce\\Areas\\Admin\\Views",
+    "\\Pronia_eCommerce\\Pronia_eCommerce\\Areas\\Admin\\Views\\Shared",
+    "\\Pronia_eCommerce\\Pronia_eCommerce\\Controllers",
+    "\\Pronia_eCommerce\\Pronia_eCommerce\\Data",
+    "\\Pronia_eCommerce\\Pronia_eCommerce\\Views",
+    "\\Pronia_eCommerce\\Pronia_eCommerce\\Views\\Shared"
+  ],
+  "SelectedNode": "\\Pronia_eCommerce\\Pronia_eCommerce\\Controllers\\BankController.cs",
+  "PreviewInSolutionExplorer": false
+}
